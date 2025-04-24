@@ -8,5 +8,6 @@ class Card:
         self.image = image
         self.x = x
         self.y = y
+        self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
-    
+

@@ -13,22 +13,25 @@ class Button:
             self.rect = self.image.get_rect(center=pos)
 
         self.text = font.render(text_input, True, base_color)
-        self.text_rect = self.text.get_rect(center=(pos[0], pos[1] + text_offset_y))
+        # Center the text relative to the button's rect
+        self.text_rect = self.text.get_rect(center=self.rect.center)
+        self.text_rect.y += text_offset_y  # Apply vertical offset if needed
+
         self.font = font
         self.base_color, self.hovering_color = base_color, hovering_color
 
-        # Combine button and text rects for accurate collision
-        self.combined_rect = self.rect.union(self.text_rect)
-
     def update(self, screen):
+        # Render the button image and text once per frame
         screen.blit(self.image, self.rect)
         screen.blit(self.text, self.text_rect)
 
     def checkForInput(self, position):
-        return self.combined_rect.collidepoint(position)
+        # Simplify collision detection to use only the button's rect
+        return self.rect.collidepoint(position)
 
     def changeColor(self, position):
-        if self.combined_rect.collidepoint(position):
+        # Update text color based on mouse hover state
+        if self.rect.collidepoint(position):
             self.text = self.font.render(self.text_input, True, self.hovering_color)
         else:
             self.text = self.font.render(self.text_input, True, self.base_color)

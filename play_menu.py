@@ -134,6 +134,8 @@ def play(screen):
     clock = pygame.time.Clock()
 
     PLAY_BACK = Button(pygame.Rect(1, 1, 200, 80), (90, 60), "BACK", get_font(75), "White", "Red", 10)
+    END_TURN = Button(pygame.Rect(SCREEN_WIDTH - 300, 10, 200, 80), (90, 60), "END TURN", get_font(75), "White", "Red", 10)    
+    
 
     running = True
     while running:
@@ -154,20 +156,38 @@ def play(screen):
         draw_panel(knight, current_monster)
 
         event_handler.check_events()        
-        event_handler.game_deck.draw_deck(screen)
+        event_handler.game_deck.draw_deck(screen)       
         
         PLAY_MOUSE_POS = pygame.mouse.get_pos()
 
         PLAY_BACK.changeColor(PLAY_MOUSE_POS)
+        END_TURN.changeColor(PLAY_MOUSE_POS)
         PLAY_BACK.update(screen)
+        END_TURN.update(screen)
+        # pygame.draw.rect(SCREEN, "RED", END_TURN.rect, 2)  # RECTANGLE example code for 
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
-                running = False
-                return "main_menu"
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
+                    running = False
+                    return "main_menu"
+
+                if END_TURN.checkForInput(PLAY_MOUSE_POS):
+                    # END TURN logic here
+                    knight.mana = knight.max_mana  # Reset mana
+
+                    # Move all remaining cards in the current hand to the discard pile
+                    while event_handler.game_deck.in_deck:
+                        card = event_handler.game_deck.in_deck.pop()
+                        event_handler.game_deck.out_of_deck.append(card)
+
+                    # Shuffle and draw a new hand (limit to 5 cards)
+                    event_handler.game_deck.shuffle_indeck()
+
             if event.type == pygame.K_ESCAPE:
                 running = False
                 return "main_menu"

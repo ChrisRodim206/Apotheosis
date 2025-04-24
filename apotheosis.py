@@ -27,7 +27,7 @@ def main():
     pygame.display.update()
 
     # Fade out of black to reveal the main menu
-    fade_transition(SCREEN, 1000, mode="out_of_black", content=main_menu_content) # COMMENT FOR PLAY TESTING
+    # fade_transition(SCREEN, 1000, mode="out_of_black", content=main_menu_content) # COMMENT FOR PLAY TESTING
 
     # Transition to the main menu
     game_state = main_menu(SCREEN)
@@ -39,7 +39,7 @@ def main():
             game_state = main_menu(SCREEN)
         elif game_state == "play":
             # Fade to black before transitioning to the play screen
-            fade_transition(SCREEN, 500, mode="to_black") # COMMENT FOR PLAY TESTING
+            # fade_transition(SCREEN, 500, mode="to_black") # COMMENT FOR PLAY TESTING
             game_state = play(SCREEN)
             # Fade out of black after transitioning to the play screen
             fade_transition(SCREEN, 500, mode="out_of_black")
