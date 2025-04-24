@@ -21,12 +21,13 @@ event_handler.game_deck.shuffle_indeck()
 
 
 class Player():
-    def __init__(self, x, y, name, max_hp, max_mana, cards, potions, defense):
+    def __init__(self, x, y, name, max_hp, max_mana, cards, potions, defense, block=0):
         self.x = x
         self.y = y
         self.name = name
         self.max_hp = max_hp
         self.hp = max_hp
+        self.block = block
         self.max_mana = max_mana
         self.mana = max_mana
         self.cards = cards
@@ -119,11 +120,11 @@ def play(screen):
 
     knight = Player(0, 0, "knight", 120, 3, 5, 0, 4)  # Animated knight
 
-    eyeball = Enemy(200, 260, "eyeball", (2, 10), 0, 1, ENEMY_ASSETS)
-    ghost = Enemy(200, 260, "ghost", (2, 10), 0, 1, ENEMY_ASSETS)
-    goblin = Enemy(200, 260, "goblin", (2, 10), 0, 1, ENEMY_ASSETS)
-    skeleton = Enemy(200, 260, "skeleton", (2, 10), 0, 1, ENEMY_ASSETS)
-    slime = Enemy(200, 260, "slime", (2, 10), 0, 1, ENEMY_ASSETS)
+    eyeball = Enemy(200, 260, "eyeball", (30, 80), 0, 1, ENEMY_ASSETS)
+    ghost = Enemy(200, 260, "ghost", (30, 80), 0, 1, ENEMY_ASSETS)
+    goblin = Enemy(200, 260, "goblin", (30, 80), 0, 1, ENEMY_ASSETS)
+    skeleton = Enemy(200, 260, "skeleton", (30, 80), 0, 1, ENEMY_ASSETS)
+    slime = Enemy(200, 260, "slime", (30, 80), 0, 1, ENEMY_ASSETS)
 
     monster_list = [eyeball, ghost, goblin, skeleton, slime]
     current_monster = random.choice(monster_list)
@@ -155,7 +156,7 @@ def play(screen):
         monster_health_bar.draw_health(current_monster.hp)
         draw_panel(knight, current_monster)
 
-        event_handler.check_events()        
+        event_handler.check_events(knight, current_monster)        
         event_handler.game_deck.draw_deck(screen)       
         
         PLAY_MOUSE_POS = pygame.mouse.get_pos()
@@ -171,19 +172,28 @@ def play(screen):
                 pygame.quit()
                 sys.exit()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN:  # Use MOUSEBUTTONDOWN for better responsiveness
+                print(f"Mouse Position: {PLAY_MOUSE_POS}")  # Debug: Print mouse position
+                print(f"BACK Button Rect: {PLAY_BACK.rect}")  # Debug: Print BACK button rect
+                print(f"END TURN Button Rect: {END_TURN.rect}")  # Debug: Print END TURN button rect
+
                 if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
+                    print("BACK button clicked")  # Debug: Confirm button click
                     running = False
                     return "main_menu"
 
                 if END_TURN.checkForInput(PLAY_MOUSE_POS):
-                    # END TURN logic here
+                    print("END TURN button clicked")  # Debug: Confirm button click
                     knight.mana = knight.max_mana  # Reset mana
 
                     # Move all remaining cards in the current hand to the discard pile
                     while event_handler.game_deck.in_deck:
                         card = event_handler.game_deck.in_deck.pop()
                         event_handler.game_deck.out_of_deck.append(card)
+
+                    # Reset card positions in the panel
+                    for index, card in enumerate(event_handler.game_deck.out_of_deck):
+                        card.rect.topleft = (150 + index * 160, SCREEN_HEIGHT - BOTTOM_PANEL + 20)  # Adjust card positions
 
                     # Shuffle and draw a new hand (limit to 5 cards)
                     event_handler.game_deck.shuffle_indeck()
@@ -211,7 +221,7 @@ def draw_panel(knight, current_monster):
     # mana
     draw_text(f'Mana: {knight.mana}', lombardic_narrow_font, 'BLUE', 150, SCREEN_HEIGHT - BOTTOM_PANEL + 130)
     # enemy stats
-    draw_text(f'{current_monster.hp} / {current_monster.hp}', lombardic_narrow_font, 'RED', monster_location[0], monster_location[1])
+    draw_text(f'{current_monster.hp} / {current_monster.max_hp}', lombardic_narrow_font, 'WHITE', monster_location[0] - 15, monster_location[1] - 1)
 
     # draw potions
     health_potion = pygame.image.load(".assets/Potions/potion_health_0.png")

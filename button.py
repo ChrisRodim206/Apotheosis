@@ -19,19 +19,28 @@ class Button:
 
         self.font = font
         self.base_color, self.hovering_color = base_color, hovering_color
+        self.is_hovered = False  # Track hover state
 
     def update(self, screen):
         # Render the button image and text once per frame
         screen.blit(self.image, self.rect)
         screen.blit(self.text, self.text_rect)
 
-    def checkForInput(self, position):
-        # Simplify collision detection to use only the button's rect
-        return self.rect.collidepoint(position)
+    def checkForInput(self, mouse_pos):
+        # Check if the mouse position is within the button's rect
+        is_clicked = self.rect.collidepoint(mouse_pos)
+        print(f"Mouse Position: {mouse_pos}, Button Rect: {self.rect}, Clicked: {is_clicked}")  # Debug: Print details
+        return is_clicked
 
     def changeColor(self, position):
-        # Update text color based on mouse hover state
+        # Update text color only if the hover state changes
         if self.rect.collidepoint(position):
-            self.text = self.font.render(self.text_input, True, self.hovering_color)
+            if not self.is_hovered:
+                self.text = self.font.render(self.text_input, True, self.hovering_color)
+                self.is_hovered = True
+                print(f"Button '{self.text_input}' is hovered.")  # Debug: Hover state
         else:
-            self.text = self.font.render(self.text_input, True, self.base_color)
+            if self.is_hovered:
+                self.text = self.font.render(self.text_input, True, self.base_color)
+                self.is_hovered = False
+                print(f"Button '{self.text_input}' is not hovered.")  # Debug: Hover state

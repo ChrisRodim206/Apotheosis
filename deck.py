@@ -1,6 +1,7 @@
 from cards import Card
 from random import randint
 import pygame  
+from time import sleep
 
 class deck:
     def __init__(self):
@@ -34,7 +35,7 @@ class deck:
             ("Bludgeon", 32, ".assets/Cards/card_bludgeon.png"),
             ("Cleave", 8, ".assets/Cards/card_cleave.png"),
             ("Iron Wave", 5, ".assets/Cards/card_iron_wave.png"),
-            ("Mace Strike", 8, ".assets/Cards/card_mace_strike.png"),
+            ("Bash", 8, ".assets/Cards/card_Bash.png"),
             ("Pommel Strike", 9, ".assets/Cards/card_pommel_strike.png"),
             ("Twin Strike", 5, ".assets/Cards/card_twin_strike.png")
         ]
@@ -82,3 +83,42 @@ class deck:
     def draw_deck(self, screen):
         for card in self.in_deck:
             screen.blit(card.image, (card.x, card.y))
+    
+    def draw_card(self):
+        card = self.out_of_deck[randint(0, len(self.out_of_deck) - 1)]
+        self.out_of_deck.remove(card)
+        self.in_deck.append(card)
+        self.draw_deck
+    
+    def use_card(self, card, current_player, current_monster):
+        if card.name == "Strike":
+            current_player.mana = current_player.mana - 1
+            current_monster.hp = current_monster.hp - 6
+        elif card.name == "Defend":
+            current_player.mana = current_player.mana - 1
+            current_player.block += 5
+        elif card.name == "Bloodletting":
+            current_player.hp = current_player.hp - 3
+            current_player.mana = current_player.mana + 2
+        elif card.name == "Bash":
+            current_player.mana = current_player.mana - 2
+            current_monster.hp = current_monster.hp - 8
+        elif card.name == "Cleave":
+            current_player.mana = current_player.mana - 1
+            current_monster.hp = current_monster.hp - 8
+        elif card.name == "Twin Strike":
+            current_player.mana = current_player.mana - 1
+            current_monster.hp = current_monster.hp - 5
+            sleep(0.25)
+            current_monster.hp = current_monster.hp - 5
+        elif card.name == "Pommel Strike":
+            current_player.mana = current_player.mana - 1
+            current_monster.hp = current_monster.hp - 9
+            self.draw_card()
+        elif card.name == "Iron Wave":
+            current_player.mana = current_player.mana - 1
+            current_monster.hp = current_monster.hp - 5
+            current_player.block += 5
+        elif card.name == "Bludgeon":
+            current_player.mana = current_player.mana - 3
+            current_monster.hp = current_monster.hp - 32
