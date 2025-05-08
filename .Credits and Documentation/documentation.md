@@ -5,29 +5,31 @@ Genre: Roguelike
 Core Mechanics: Deck building, card synergies, merchants, bosses, card costs
     Mana: Card costs
 
-Story: TBD
-
-Characters: Knight, Mage
+Characters: Knight
 
     Knight:
-        Default Attack: Slash
+        Default Attack: Strike
             Single target damage, low cost, higher card weight.
-        Default Defense: Block
+        Default Defense: Defend
             Adds an amount of Guard, which reduces damage from enemy attacks. More similar to an overshield.
-
-        AoE Ability: Cleave
-            Deals more damage to a single enemy and some damage to adjacent enemies.
+        
+        Attacks:
+            Bash: Deals a medium amount of damage.
+            Bludgeon: Deals a large amount of damage at a high mana cost.
+            Cleave: Deals a medium amount of damage to all enemies.
+            Iron Wave: Damages enemies and grants players a small amount of block.
+            Pommel Strike: Deals high damage and draws 1 card.
+            Twin Strike: Deals medium damage twice.
+            Bloodletting: Grants mana in exchange for a small amount of health.
 
     Items:
-        Can be bought from merchants, looted after battles.
-
         Potion: 
-            Heals a small amount of health, can be used once per battle.
+            Heals a small amount of health.
         
         Mana Potion:
-            Restores a small amount of mana, can be used once per battle.
+            Restores a small amount of mana.
 
-Levels: 1: Cave, 2: Forest, 3: Mountain, 4: Castle, 5: Heaven
+Levels: 1: Cave, 2: Forest, 3: Ruins, 4: Dungeon, 5: Castle Halls, 6: Castle Ramparts
 
 
 # Week 2: 1/30/25

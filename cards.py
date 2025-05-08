@@ -1,10 +1,10 @@
 import pygame
 
 class Card:
-    def __init__(self, name, energy_cost, value, image, x, y):
+    def __init__(self, name, mana_cost, damage, image, x, y):
         self.name = name
-        self.energy_cost = energy_cost
-        self.value = value
+        self.mana_cost = mana_cost
+        self.damage = damage  # Add damage attribute
         self.image = image
         self.x = x
         self.y = y

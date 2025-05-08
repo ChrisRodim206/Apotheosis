@@ -29,7 +29,7 @@ class Button:
     def checkForInput(self, mouse_pos):
         # Check if the mouse position is within the button's rect
         is_clicked = self.rect.collidepoint(mouse_pos)
-        print(f"Mouse Position: {mouse_pos}, Button Rect: {self.rect}, Clicked: {is_clicked}")  # Debug: Print details
+        # print(f"Mouse Position: {mouse_pos}, Button Rect: {self.rect}, Clicked: {is_clicked}")  # Debug: Print details
         return is_clicked
 
     def changeColor(self, position):
@@ -38,9 +38,9 @@ class Button:
             if not self.is_hovered:
                 self.text = self.font.render(self.text_input, True, self.hovering_color)
                 self.is_hovered = True
-                print(f"Button '{self.text_input}' is hovered.")  # Debug: Hover state
+                # print(f"Button '{self.text_input}' is hovered.")  # Debug: Hover state
         else:
             if self.is_hovered:
                 self.text = self.font.render(self.text_input, True, self.base_color)
                 self.is_hovered = False
-                print(f"Button '{self.text_input}' is not hovered.")  # Debug: Hover state
+                # print(f"Button '{self.text_input}' is not hovered.")  # Debug: Hover state
